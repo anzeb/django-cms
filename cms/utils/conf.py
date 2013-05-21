@@ -9,7 +9,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 import os
 import warnings
-
+from dbtemplates.models import Template
 
 __all__ = ['get_cms_setting']
 
@@ -86,6 +86,8 @@ def get_placeholder_frontend_editing():
 
 def get_templates():
     templates = list(getattr(settings, 'CMS_TEMPLATES', []))
+    templates += [(str(x), str(x)) for x in Template.objects.all()]
+
     if get_cms_setting('TEMPLATE_INHERITANCE'):
         templates.append((constants.TEMPLATE_INHERITANCE_MAGIC, _('Inherit the template of the nearest ancestor')))
     return templates
